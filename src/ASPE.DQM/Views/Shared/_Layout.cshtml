@@ -1,0 +1,167 @@
+﻿@{
+    string returnUrl = User.Identity.IsAuthenticated ? string.Empty : this.Context.Request.Query.Where(k => k.Key == "ReturnUrl").Select(k => k.Value.ToString()).FirstOrDefault();
+}
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no" />
+    @{ string title = string.IsNullOrEmpty(ViewData["Title"].ToString()) ? "Data Quality Metrics :: ASPE" : $"{ViewData["Title"]} - ASPE::DQM"; }
+    <title>@title</title>
+    <link rel="shortcut icon" type="image/x-icon" href="/assets/logo.ico" />
+    <link rel="icon" type="image/x-icon" href="/assets/logo.ico" />
+    <link rel="stylesheet" type="text/css" href="~/assets/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://use.fontawesome.com/releases/v5.6.3/css/all.css" integrity="sha384-UHRtZLI+pbxtHCWp1t77Bi1L4ZtiqrqD80Kn4Z8NTSRyMA2Fd33n5dQ8lWUE00s/" crossorigin="anonymous">
+    <environment include="Development"><link rel="stylesheet" type="text/css" href="~/css/site.css" /></environment>
+    <environment exclude="Development"><link rel="stylesheet" type="text/css" href="~/css/site.min.css" /></environment>
+    <script src="~/scripts/commons.js" asp-append-version="true"></script>
+    @RenderSection("Head", required: false)
+</head>
+<body>
+    <nav class="sidebar navbar-expand-lg navbar-expand-md navbar-expand-xl" id="sidebarMenuLG">
+        @await Html.PartialAsync("_SideNav")
+    </nav>
+    <nav class="navbar-dark navbar-expand-lg" id="sidebarMenuSM">
+        <div class="nav-wrapper pr-2 pl-2 pb-2 pt-0 text-justify clearfix">
+            <span class="navbar-brand h1">
+                <span class="dqm-title">Data Quality Metrics</span>
+                <span class="dqm-title-sub"><span class="dqm-title-sub-first">A</span> <span class="dqm-title-sub-first">D</span>atabase <span class="dqm-title-sub-first">F</span>ingerprinting <span class="dqm-title-sub-first">F</span>ramework</span>
+            </span>
+            <button class="navbar-toggler float-right mt-3" type="button" data-toggle="collapse" data-target="#sidebarContent" aria-controls="sidebarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+        </div>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <div id="vue_loggedin_sidebar">
+                <div class="nav-dqm-actions bg-light clearfix px-2">
+                    <button class="btn btn-link float-left" v-on:click="onTriggerShowProfile"><i class="fas fa-user-circle"></i> @User.Identity.Name</button>
+                    <button class="btn btn-link float-right" v-on:click="onTriggerLogout"> Logout</button>
+                </div>
+                <user-dialog ref="user_dialog"></user-dialog>
+            </div>
+        }
+        else
+        {
+            <div id="vue_login_sidebar" class="flex-fill bg-light">
+                <div class="nav-dqm-actions bg-light clearfix px-2">
+                    <button type="button" class="btn btn-link float-left" v-on:click="onTriggerLogin"><i class="fas fa-user-circle"></i> Login</button>
+                    <a href="/registration" class="btn btn-link float-right">Register</a>
+                </div>
+                <login-dialog :return-url="'@Html.Raw(returnUrl)'" ref="login_dialog"></login-dialog>
+            </div>
+        }
+        @await Html.PartialAsync("_SideNav")
+    </nav>
+    <div class="main-content">
+        <main role="main">
+            <div class="bg-light mb-2" id="topNavLG">
+                <nav class="navbar navbar-expand-sm justify-content-end">
+                    @await Html.PartialAsync("_TopNav")
+                </nav>
+            </div>
+
+            <div class="container-fluid">
+                @RenderBody()
+            </div>
+        </main>
+
+    </div>
+    
+
+    <script id="vue-login-template" type="text/x-template">
+        <div>
+            <div style="display:none">
+                <kendo-dialog ref="loginDialog"
+                              title="Login to Data Quality Metrics"
+                              :visible="false"
+                              :width="'90%'"
+                              :maxWidth="500"
+                              :closable="false">
+                    <form ref="login_form" class="container" v-kendo-validator onsubmit="return false;">
+                        <div class="form-group">
+                            <label class="w-100">
+                                <span class="pb-2 d-block">Username</span>
+                                <input type="text" ref="txt_username" class="form-control" required name="txt_username" validationMessage="Username is required." v-model="username" />
+                            </label>
+                        </div>
+                        <div class="form-group">
+                            <label class="w-100">
+                                <span class="pb-2 d-block">Password</span>
+                                <input type="password" class="form-control" required name="txt_password" validationMessage="Password is required." v-model="password" />
+                            </label>
+                        </div>
+                        <p class="alert alert-danger" v-show="errorMessage!=''">{{errorMessage}}</p>
+                    </form>
+                    <kendo-dialog-action :text="loginButtonText" :action="onLogin"></kendo-dialog-action>
+                    <kendo-dialog-action :text="cancelButtonText" :primary="true" :action="onCancelLogin"></kendo-dialog-action>
+                </kendo-dialog>
+            </div>
+        </div>
+    </script>
+    <script id="vue-authenticated-template" type="text/x-template">
+        <div>
+            <div style="display:none">
+                <kendo-dialog ref="profileDialog"
+                              title="User Profile"
+                              :visible="false"
+                              :width="'90%'"
+                              :maxWidth="750">
+                    <section>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label class="w-100">
+                                    <span class="pb-2 d-block">First Name</span>
+                                    <input type="text" class="form-control" readonly v-model="profile.firstname" />
+                                </label>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label class="w-100">
+                                    <span class="pb-2 d-block">Last Name</span>
+                                    <input type="text" class="form-control" readonly v-model="profile.lastname" />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label class="w-100">
+                                    <span class="pb-2 d-block">Username</span>
+                                    <input type="text" class="form-control" readonly v-model="profile.username" />
+                                </label>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label class="w-100">
+                                    <span class="pb-2 d-block">Email</span>
+                                    <input type="text" class="form-control" readonly v-model="profile.email" />
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="form-group col-sm-6">
+                                <label class="w-100">
+                                    <span class="pb-2 d-block">Phone</span>
+                                    <input type="text" class="form-control" readonly v-model="profile.phonenumber" />
+                                </label>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label class="w-100">
+                                    <span class="pb-2 d-block">Organization</span>
+                                    <input type="text" class="form-control" readonly v-model="profile.organization" />
+                                </label>
+                            </div>
+                        </div>
+                    </section>
+                    <kendo-dialog-action :text="editButtonText" :action="onEditProfile"></kendo-dialog-action>
+                    <kendo-dialog-action :text="closeButtonText" :primary="true"></kendo-dialog-action>
+                </kendo-dialog>
+            </div>
+        </div>
+    </script>
+
+    <script src="~/assets/jquery/jquery.min.js"></script>
+    <script src="~/assets/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/scripts/page.js" asp-append-version="true"></script>
+    @RenderSection("Scripts", required: false)
+
+</body>
+</html>

@@ -1,0 +1,294 @@
+﻿html {
+    position: relative;
+    min-height: 100%;
+}
+
+body {
+    font-size: .875rem;
+    margin-bottom: 60px;
+}
+
+.sidebar .nav-link {
+    font-weight: 500;
+    color: #333;
+}
+
+    .sidebar .nav-link .feather {
+        margin-right: 4px;
+        color: #999;
+    }
+    .sidebar .nav-link.active {
+        color: #007bff;
+    }
+
+        .sidebar .nav-link:hover .feather,
+        .sidebar .nav-link.active .feather {
+            color: inherit;
+        }
+
+    .sidebar ul li ul .nav-link {
+        font-weight: normal;
+    }
+
+.sidebar-heading {
+    font-size: .75rem;
+    text-transform: uppercase;
+}
+
+.sidebar-brand {
+    width: 100%;
+    padding: 4px;
+    padding-top: .75rem;
+    padding-bottom: .75rem;
+    font-size: 1rem;
+    background-color: #476b9e;
+    box-shadow: inset -1px 0 0 rgba(0, 0, 0, .25);
+    color: #f3f3f3;
+}
+.sidebar-brand-collapsed {
+    background-color: rgb(33, 115, 70);
+}
+.sidebar-brand a {
+    color: #f3f3f3;
+}
+
+.branding-title {
+    text-align: center;
+    font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+}
+
+    .branding-title small {
+        display: block;
+        font-weight: normal;
+        font-size: 0.875rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+.branding-title-svg {
+    fill: #f3f3f3;
+}
+
+.dqm-title {
+    display:block;
+    font-size:1.65rem;
+}
+
+.dqm-title-sub {
+    display: block;
+    font-size: 0.65rem;
+    font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    text-transform:uppercase;
+}
+
+    .dqm-title-sub-first{
+        font-size:0.875rem;
+    }
+
+    .navbar .form-control {
+        padding: .75rem 1rem;
+        border-width: 0;
+        border-radius: 0;
+    }
+
+.form-control-dark {
+    color: #fff;
+    background-color: rgba(255, 255, 255, .1);
+    border-color: rgba(255, 255, 255, .1);
+}
+
+    .form-control-dark:focus {
+        border-color: transparent;
+        box-shadow: 0 0 0 3px rgba(255, 255, 255, .25);
+    }
+
+.nav-dqm-actions {
+    
+}
+
+.todo-hint-text {
+    font-style: italic;
+}
+
+    .todo-hint-text::before {
+        content: "TODO: ";
+        font-weight: bold;
+    }
+
+
+.footer {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    white-space: nowrap;
+    /* Set the fixed height of the footer here */
+    height: 60px;
+    line-height: 60px; /* Vertically center the text there */
+}
+
+a.grid-link,
+.k-grid a.grid-link,
+a.link-style {
+    color: #007bff;
+}
+
+    a.grid-link:hover,
+    .k-grid a.grid-link:hover,
+    a.link-style:hover {
+        color: #0026ff;
+        text-decoration: underline;
+    }
+a.link-style{
+    cursor:pointer;
+}
+
+.btn[data-toggle=collapse] .chevron:after {
+    font-size:1rem;
+    content: "\f078";
+}
+.btn.collapsed[data-toggle=collapse] .chevron:after {
+    font-size: 1rem;
+    content: "\f054";
+}
+
+@supports ((position: -webkit-sticky) or (position: sticky)) {
+    .sidebar-sticky {
+        position: -webkit-sticky;
+        position: sticky;
+    }
+}
+/*Expanded layout*/
+@media (min-width: 768px) {
+    .sidebar {
+        position: fixed;
+        width: 260px;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        /*z-index: 100;  Behind the navbar */
+        padding: 0; /* Height of navbar */
+        box-shadow: inset -1px 0 0 rgba(0, 0, 0, .1);
+    }
+    #sidebarContent{
+        display: block;
+    }
+
+    .sidebar-sticky {
+        position: relative;
+        top: 0;
+        height: calc(100vh - 48px);
+        /*padding-top: .5rem;*/
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    }
+
+    .sidebar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+    .sidebar ul.sub-links{
+        margin-left:1rem;
+    }
+
+    #sidebarMenuSM {
+        display: none;
+    }
+    #innerTopNav{
+        display:none;
+    }
+    .main-content {
+        padding: 0px;
+        margin-left: 260px;
+    }
+    .visualization-card {
+        position: absolute;
+        top: 60px;
+        bottom: 20px;
+        left: 280px;
+        right: 20px;
+    }
+}
+/*Collapsed layout*/
+@media (max-width: 767px) {
+    .sidebar {
+        position: relative;
+        display: -ms-flexbox;
+        display: flex;
+        -ms-flex-wrap: wrap;
+        flex-wrap: wrap;
+        -ms-flex-align: center;
+        align-items: center;
+        -ms-flex-pack: justify;
+        justify-content: space-between;
+        padding: 0.5rem 1rem;
+    }
+
+    .sidebar-sticky {
+        position: relative;
+        top: 0;
+        overflow-x: hidden;
+        overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
+    }
+
+    .sidebar-collapse {
+        -ms-flex-preferred-size: 100%;
+        flex-basis: 100%;
+        -ms-flex-positive: 1;
+        flex-grow: 1;
+        -ms-flex-align: center;
+        align-items: center;
+    }
+
+    .sidebar-brand{
+        display:none;
+    }
+
+    ul.sub-links li.nav-item {
+        padding-left: 1rem;
+    }
+
+    #sidebarMenuLG {
+        display: none;
+        
+    }
+    #topNavLG{
+        display:none;
+    }
+
+    .main-content {
+        padding: 0px;
+    }
+
+    #sidebarMenuSM {
+        min-width:320px;
+        margin-bottom:1.5rem;
+    }
+        #sidebarMenuSM .nav-wrapper {
+            color: #f3f3f3;
+            background-color: #476b9e;
+            height:5rem;
+        }
+        #sidebarMenuSM .h1 {
+            font-family: Cambria, Cochin, Georgia, Times, Times New Roman, serif;
+        }
+        #sidebarContent{
+            background-color:rgba(255, 255, 255, .25);
+            border-bottom:1px solid #eee;
+        }
+    .visualization-card {
+        position: absolute;
+        top: 90px;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+    }
+}
+
+@media (min-width: 767px) {
+    .index-panel{
+        min-height:18rem;
+    }
+}

@@ -1,0 +1,71 @@
+﻿
+@{
+    bool _edit = ViewBag.ID != null;
+    string headerTitle = _edit ? "Edit Visualization" : "Register Visualization";
+    ViewData["Title"] = headerTitle;
+    string saveButtonText = _edit ? "Save Changes" : "Register Visualization";
+    string saveButtonCommand = _edit ? "onEdit" : "onRegister";
+    string cancelButtonText = _edit ? "Cancel Edit" : "Cancel";
+}
+@section Head{ 
+    <style type="text/css">
+        span.required {
+            color:red;
+        }
+    </style>
+}
+
+@if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SystemAdministrator_Key)).Succeeded)
+{
+    <form id="vue_registration" ref="registration_form" v-kendo-validator onsubmit="return false;" class="container" style="display:none;" v-show="true" data-visual-id="@ViewBag.ID">
+        <div class="card" style="margin-top:1.5rem">
+            <div class="card-header">
+                @if (_edit) {<a class="btn btn-outline-secondary float-right" href="/visual/@ViewBag.ID">View</a>}
+                <h2>@headerTitle</h2>
+            </div>
+            <div class="card-body">
+                <div class="form-group">
+                    <label for="txtTitle">Title:<span class="required" title="Required">*</span></label>
+                    <input id="txtTitle" class="form-control" type="text" validationMessage="Please enter the title" required v-model="title" />
+                </div>
+                <div class="form-group">
+                    <label for="txtAppID">App ID:<span class="required" title="Required">*</span></label>
+                    <input id="txtAppID" class="form-control" type="text" validationMessage="Please enter the App ID" required v-model="appID" />
+                </div>
+                <div class="form-group">
+                    <label for="txtSheetID">Sheet ID:</label>
+                    <input id="txtSheetID" class="form-control" type="text" v-model="sheetID" />
+                </div>
+                <div class="form-group">
+                    <label for="txtDescription">Description:</label>
+                    <textarea id="txtDescription" class="form-control" v-model="description"></textarea>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="chkRequiresAuth" v-model="requireAuth">
+                    <label class="form-check-label" for="chkRequiresAuth">Requires Authentication</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="checkbox" id="chkPublished" v-model="publish">
+                    <label class="form-check-label" for="chkPublished">Published</label>
+                </div>
+            </div>
+            <div class="card-footer">
+                <button type="button" class="btn btn-primary" :primary="true" @@click="@saveButtonCommand">@saveButtonText</button>
+                <a class="btn btn-outline-secondary" href="/visualizations">@cancelButtonText</a>
+                @if (_edit){<button type="button" class="btn btn-danger float-right" v-on:click="onDelete">Delete</button>}
+            </div>
+        </div>
+    </form>
+    <script src="~/Scripts/RegisterVisualization.js" asp-append-version="true"></script>
+    
+}
+else
+{
+    <div class="card" style="margin-top:1.5rem">
+        <div class="card-header">@headerTitle</div>
+        <div class="card-body">
+            <p class="alert alert-danger">You must be authorized to view this page.</p>
+        </div>
+    </div>
+
+}

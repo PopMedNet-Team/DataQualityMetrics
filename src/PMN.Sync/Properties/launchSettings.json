@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "PMN.Sync": {
+      "commandName": "Project",
+      "environmentVariables": {
+        "environment": "Development"
+      }
+    }
+  }
+}

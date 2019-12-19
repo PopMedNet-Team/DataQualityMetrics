@@ -1,0 +1,192 @@
+﻿@model ASPE.DQM.Models.MetricDetailsViewModel
+@{
+    ViewData["Title"] = Model.Title;
+}
+@section Head{
+<environment include="Development"><link rel="stylesheet" type="text/css" href="~/css/metric-details.css" /></environment>
+<environment exclude="Development"><link rel="stylesheet" type="text/css" href="~/css/metric-details.min.css" /></environment>
+}
+@if (Model != null)
+{
+    <div id="PageLoadingMessage">
+        <div style="width:350px;margin-left:auto;margin-right:auto;margin-top:50px;">
+            <div class="panel panel-default">
+                <div class="panel-body" style="text-align:center;padding:24px;">
+                    <img src="~/assets/loading.gif" height="40" />
+                    <span style="padding-left:8px;font-weight:bold;color:dimgray">Loading details...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="vue_metric_details" ref="metric_details_ref" data-itemid="@Model.ID" v-show="true" style="display:none;">
+        <div class="card" style="margin-top:1.5rem">
+            <div class="card-header">
+                @if (User.Identity.IsAuthenticated)
+                {
+                    <div class="float-right">
+                        <button id="btnFavoriteToggle" class="btn btn-link" v-on:click.stop="onToggleBookmark" title="Bookmark this metric, click to toggle."><i id="bookmarkIcon" v-bind:class="[metric.bookmarked ? 'fas' : 'far', 'fa-bookmark']" style="font-size:2em;color:#476b9e;"></i></button>
+                    </div>
+                }
+                <h5>{{metric.title}}</h5>
+            </div>
+            <div class="card-body">
+                <div class="container-fluid">
+                    <div class="alert alert-primary" role="alert">
+                        <p class="p-0 m-0">All saved drafts and submitted metrics can be found on your personal Dashboard.  Draft metrics can only be viewed by the author.</p>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label class="display-label">Description</label>
+                            <div class="form-control display-item" v-html="metric.description || '&nbsp;'"></div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label class="display-label">Justification</label>
+                            <span class="form-control display-item" v-html="metric.justification || '&nbsp;'"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label class="display-label">Expected Results</label>
+                            <span class="form-control display-item" v-html="metric.expectedResults || '&nbsp;'"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md col-12">
+                            <label class="display-label">Results Type</label>
+                            <span class="form-control display-item">{{ resultsTypeTitle }}</span>
+                        </div>
+                        <div class="col-md col-12">
+                            <label class="display-label">Domain</label>
+                            <span class="form-control display-item">{{ domains }}</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label class="display-label">DQ Harmonization Category</label>
+                            <div class="form-control display-item">{{ frameworkCategoriesList }}</div>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label class="display-label">Jira # for Public comments</label>
+                            <span class="form-control display-item">
+                                <a v-bind:href="metric.serviceDeskUrl">{{metric.serviceDeskUrl || '&nbsp;'}}</a>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label class="display-label">Identifier</label>
+                            <span class="form-control display-item">{{metric.id}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        @if (Model.IsAuthor || Model.IsSystemAdministrator)
+                        {<div class="col-sm">
+                                <label class="display-label">Status</label>
+                                <span class="form-control display-item">{{metric.statusText || '&nbsp;'}}</span>
+                            </div>}
+                        <div class="col-sm">
+                            <label class="display-label">Author</label>
+                            <span class="form-control display-item">{{metric.authorName || '&nbsp;'}}</span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-sm">
+                            <label class="display-label">Created</label>
+                            <span class="form-control display-item">{{metric.createdOnLocal.toLocaleString()}}</span>
+                        </div>
+                        <div class="col-sm">
+                            <label class="display-label">Last Updated</label>
+                            <span class="form-control display-item">{{metric.modifiedOnLocal.toLocaleString()}}</span>
+                        </div>
+                    </div>
+                    <section style="margin-top:2rem" v-if="documents != null && documents.length > 0" class="clearfix">
+                        <h5 class="card-title">Supporting Documents</h5>
+                        <ul style="list-style:none; padding:0px;">
+                            <li style="float:left; margin-right: 20px;" v-for="doc in documents">
+                                <span v-html="doc.nameLink + ' (' + $options.filters.formatfilesize(doc.size) + ')'"></span>
+                            </li>
+
+                        </ul>
+                    </section>
+                    @if ((await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded)
+                    {
+                        <section style="margin-top:2rem">
+                            <h5>Measure Submission Templates</h5>
+                            <ul style="list-style:none; padding:0px;">
+                                <li style="float:left; margin-right: 20px;">
+                                    <a :href="'/api/metrics/download-measure-template?format=xlsx&metricID=' + metric.id" download><i class="far fa-file"></i> Excel Template</a>
+                                </li>
+                                <li style="float:left; margin-right: 20px;">
+                                    <a :href="'/api/metrics/download-measure-template?format=json&metricID=' + metric.id" download><i class="far fa-file"></i> JSON Template</a>
+                                </li>
+                            </ul>
+                        </section>
+                    }
+                    @*<div class="row">
+            <div class="col-sm">
+                <span class="display-label"></span>
+                <span class="display-item"></span>
+            </div>
+            <div class="col-sm">
+                <span class="display-label"></span>
+                <span class="display-item"></span>
+            </div>
+        </div>*@
+
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        @if (Model.IsSystemAdministrator && Model.CurrentStatusID != ASPE.DQM.Model.MetricStatus.DraftID)
+                        {
+                            <div class="col-lg">
+                                <div class="card">
+                                    <div class="card-header">
+                                        <h6>Update Status</h6>
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-group row">
+                                            <div class="col">
+                                                <label>New Status</label>
+                                                <kendo-dropdownlist :data-source="nextStatuses"
+                                                                    v-model="nextStatusId"
+                                                                    :data-text-field="'text'"
+                                                                    :data-value-field="'value'"
+                                                                    :options-label="'Select a new status...'"
+                                                                    class="form-control"></kendo-dropdownlist>
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <div class="col">
+                                                <label>Comment</label>
+                                                <textarea class="form-control" v-model="nextStatusComment"></textarea>
+                                            </div>
+                                        </div>
+                                        <button type="button" class="btn btn-primary" v-on:click.stop="onUpdateStatus">Update</button>
+                                    </div>
+                                </div>
+
+                            </div>
+                        }
+                        @if (Model.IsAuthor && Model.CurrentStatusID == ASPE.DQM.Model.MetricStatus.DraftID)
+                        {
+                            <button type="button" class="btn btn-success" v-on:click.stop="onSubmitForReview">Submit for Review</button>
+                        }
+                        <div class="col-lg py-3 py-lg-0" style="text-align:right;">
+                            @if (Model.AllowEdit)
+                            {<a class="btn btn-primary mr-2" style="width:8rem;" v-bind:href="'/metric/' + metric.id + '/edit'">Edit</a>}
+                            @if (Model.AllowCopy)
+                            {<button type="button" class="btn btn-secondary" style="width:8rem;" v-on:click.stop="onCopy">Copy</button>}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script src="~/Scripts/metric-details.js" asp-append-version="true"></script>
+}

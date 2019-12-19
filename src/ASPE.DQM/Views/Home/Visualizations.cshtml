@@ -1,0 +1,45 @@
+﻿@{
+    ViewData["Title"] = "Explore DQM";
+    bool isAdministrator = (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SystemAdministrator_Key)).Succeeded;
+}
+
+<section id="vue_visualizations" ref="visualizations_ref" v-kendo-validator onsubmit="return false;" class="container" style="display:none;" v-show="true">
+    <div class="card" style="margin-top:1.5rem">
+        <div class="card-header">
+            <h2>Explore DQM</h2>
+        </div>
+        <div class="card-body p-0">
+            <table class="table table-striped">
+                <colgroup>
+                    @if (isAdministrator)
+                    {<col width="10%" />}
+                    <col width="25%" />
+                    <col width="65%" />
+                </colgroup>
+                <thead>
+                    <tr>
+                        @if (isAdministrator)
+                        {<th scope="col"></th>}
+                        <th scope="col">Title</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="visual in visualizations">
+                        @if (isAdministrator)
+                        {<td><a v-bind:href="'/edit-visualization/' + visual.id"><i class="fas fa-pencil-alt"></i> Edit</a></td>}
+                        <td>
+                            @if (isAdministrator)
+                            {<i v-if="visual.requireAuth" style="margin-right:10px; color: #007bff;" class="fas fa-lock" title="Requires authentication to view."></i>} <span v-html="visual.linkTitle"></span>
+                        </td>
+                        <td>{{visual.description}}</td>
+                    </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+    </div>
+</div>
+</section>
+<script src="~/Scripts/visualizations-list.js" asp-append-version="true"></script>
+

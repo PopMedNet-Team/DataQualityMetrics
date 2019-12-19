@@ -1,0 +1,446 @@
+﻿@{
+    ViewData["Title"] = "Resources";
+    string serviceDeskUrl = "<a target=\"_blank\" href=\"https://popmednet.atlassian.net/servicedesk/customer/portal/6\" style=\"white-space:nowrap;\">Data Quality Metrics Community Board <i class=\"fas fa-external-link-alt\"></i></a>";
+    string dashboardLink = User.Identity.IsAuthenticated ? "<a href=\"/my-dashboard\">Dashboard</a>" : "Dashboard";
+    string submitMeasuresLink = (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded) ? "<a href=\"/submit-measure\">\"Submit Measures\"</a>" : "Submit Measures";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h2>Resources</h2>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Table of Contents</h5>
+                <ul>
+                    <li><a href="#framework-background" onclick="window.doScrollTo('framework-background')">DQ Harmonization Framework Background</a></li>
+                    <li><a href="#project-description" onclick="window.doScrollTo('project-description')">Project Description and Funding Sources</a></li>
+                    <li><a href="#community" onclick="window.doScrollTo('community')">Community Engagement</a></li>
+                    <li><a href="#technical-resources" onclick="window.doScrollTo('technical-resources')">Technical Resources</a></li>
+                    <li><a href="#visualizations" onclick="window.doScrollTo('visualizations')">Visualizations</a></li>
+                    <li><a href="#data-model" onclick="window.doScrollTo('data-model')">Data Model</a></li>
+                </ul>
+            </div>
+            <script type="text/javascript"> window.doScrollTo = function (identifier) { this.event.preventDefault(); let el = document.getElementById(identifier); if (el) el.scrollIntoView(true); return false; }; </script>
+        </div>
+
+        <section id="framework-background" class="card mt-1">
+            <div class="card-header" id="h-1">
+                <h3 class="card-subtitle"><button class="btn btn-link" type="button" aria-expanded="true" aria-controls="c-1" data-toggle="collapse" data-target="#c-1" style="font-size:inherit;">DQ Harmonization Framework Background</button></h3>
+            </div>
+            <div id="c-1" class="collapse show" aria-labelledby="h-1">
+                <div class="card-body">
+                    <p class="card-text">The Data Quality Metrics (DQM) project leverages the data quality harmonization framework (Kahn, 2016) to implement a new platform that enables standardization of data quality metrics and assessment and visualization of data quality output. This leading theoretical framework categorizes disparate DQ terms and findings using standard vocabulary that provides the foundation and standards that can be used in new tools, like this DQM system.</p>
+                    <ul>
+                        <li>
+                            Kahn et al. 2016: Data Harmonized Data Quality Assessment Terminology and Framework for the Secondary Use of Electronic Health Record Data
+                            <ul>
+                                <li><a target="_blank" href="http://repository.edm-forum.org/egems/vol4/iss1/18">http://repository.edm-forum.org/egems/vol4/iss1/18 <i class="fas fa-external-link-alt"></i></a></li>
+                                <li>DOI: 10.13063/2327-9214.1244</li>
+                            </ul>
+                        </li>
+                        <li>
+                            Resulting DQ Framework: Existing DQ terms and concepts harmonized and organized into a framework of categories and subcategories as illustrated in the Table below
+                            <ul>
+                                <li>
+                                    DQ Categories and Subcategories
+                                    <ul>
+                                        <li>
+                                            Conformance: Do data values adhere to specific standards and formats?
+                                            <ul>
+                                                <li>
+                                                    Subcategories:
+                                                    <ul>
+                                                        <li>Value Conformance</li>
+                                                        <li>Relational Conformance</li>
+                                                        <li>Computational Conformance</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                        <li>Completeness: Are data values present?</li>
+                                        <li>
+                                            Plausibility: Are data values believable?
+                                            <ul>
+                                                <li>
+                                                    Subcategories:
+                                                    <ul>
+                                                        <li>Uniqueness Plausibility</li>
+                                                        <li>Atemporal Plausibility</li>
+                                                        <li>Temporal Plausibility</li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    DQ Assessment contexts:
+                                    <ul>
+                                        <li>Verification</li>
+                                        <li>Validation</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                    <div class="row">
+                        <div class="col-12 col-xl">
+                            <img class="img-fluid shadow-sm border" src="~/assets/Kahn Framework 1.png" />
+                        </div>
+                        <div class="col-12 col-xl">
+                            <img class="img-fluid shadow-sm border" src="~/assets/Kahn Framework 2.png" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="project-description" class="card mt-1">
+            <div class="card-header" id="h-2">
+                <h3 class="card-subtitle"><button class="btn btn-link" type="button" aria-expanded="true" aria-controls="c-2" data-toggle="collapse" data-target="#c-2" style="font-size:inherit;">Project Description and Funding Source</button></h3>
+            </div>
+            <div id="c-2" class="collapse show" aria-labelledby="h-2">
+                <div class="card-body">
+                    <h4 class="card-title">About</h4>
+                    <p class="card-text">The Data Quality Metrics system is a pilot project that establishes a set of standardized data quality metrics that can be used to compare data sources to each other. This allows researchers to better understand candidate data sources before querying and analyzing them.  The system addresses the following goals:</p>
+                    <ul>
+                        <li>Develop a web-based tool that operationalizes the leading theoretical data quality harmonization framework (Kahn et al, 2016) into a set of standard data quality metrics and a tool to author new metrics</li>
+                        <li>Create a beta version of the platform with Sentinel and PCORnet as use cases</li>
+                        <li>Collaborate with existing DQ stakeholder community and incorporate feedback on tools developed</li>
+                        <li>Create open source tools (web application, flexible data model, visualization templates) that illustrate data quality metric authoring, capture of data quality metric output (measures), and evaluation and visualization of supplied measures.</li>
+                    </ul>
+                    <h4 class="card-title">Funding</h4>
+                    <ul>
+                        <li>This pilot project was funded by the US Food and Drug Administration through the Department of Health and Human Services (HHS) Contract number HHSF223201400030I / HHSF22301006T.</li>
+                        <li>Data Quality Metrics is an FDA Sentinel project funded by the Department Health and Human Services (HHS) Office of the Assistant Secretary for Planning and Evaluation (ASPE). </li>
+                        <li>ASPE, via the Patient-Centered Outcomes Research Trust Fund (PCORTF), has funded multiple HHS-agency sponsored projects focused on building the infrastructure necessary to support robust real-world evidence generation.  This project is funded via FDA to develop a framework to systematically assess data quality across data sources and distributed data networks.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+        <section id="community" class="card mt-1">
+            <div class="card-header" id="h-3">
+                <h3 class="card-subtitle"><button class="btn btn-link" type="button" aria-expanded="true" aria-controls="c-3" data-toggle="collapse" data-target="#c-3" style="font-size:inherit;">Community Engagement</button></h3>
+            </div>
+            <div id="c-3" class="collapse show" aria-labelledby="h-3">
+                <div class="card-body">
+                    <p class="card-text">Four stakeholder sessions were held in September 2019 to demonstrate a beta-version of the software. The sessions addressed the following topics:</p>
+                    <ol>
+                        <li>
+                            Demonstration and discussion related to authoring data quality metrics - these two sessions were targeted to stakeholders
+                            that are interested in the creation and discussion of metrics that can be utilized for multiple data sources and research questions.
+                            <div class="my-3">
+                                Click to view or hide the desired video:<br />
+                                <button class="btn btn-primary mt-1" type="button" data-toggle="collapse" data-target="#shs-20190903" aria-expanded="false" aria-controls="shs-20190903">Data Quality Metrics Stakeholder Session - 2019.09.03</button>
+                                <button class="btn btn-primary mt-1" type="button" data-toggle="collapse" data-target="#shs-20190904" aria-expanded="false" aria-controls="shs-20190904">Data Quality Metrics Stakeholder Session - 2019.09.04</button>
+                            </div>
+                        </li>
+                        <li>
+                            Demonstration and discussion regarding exploring database fingerprints and submission of measures - these two sessions were targeted
+                            to stakeholders that are interested in evaluating fitness for use of various data sources or for various research questions.
+                            <div class="mt-3">
+                                Click to view or hide the desired video:<br />
+                                <button class="btn btn-primary mt-1" type="button" data-toggle="collapse" data-target="#shs-20190906-am" aria-expanded="false" aria-controls="shs-20190906-am">Data Quality Metrics Stakeholder Session - 2019.09.06 am</button>
+                                <button class="btn btn-primary mt-1" type="button" data-toggle="collapse" data-target="#shs-20190906-pm" aria-expanded="false" aria-controls="shs-20190906-pm">Data Quality Metrics Stakeholder Session - 2019.09.06 pm</button>
+                            </div>
+                        </li>
+                    </ol>
+                    <p class="card-body">We are utilizing Service Desk tickets to enable continued discussion among community members. If you have any feedback or suggestions, please create a ticket at @Html.Raw(serviceDeskUrl).</p>
+                    <div class="collapse" id="shs-20190903">
+                        <h4 style="font-size:1.15rem;">Data Quality Metrics Stakeholder Session - 2019.09.03</h4>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video class="embed-responsive-item" controls>
+                                <source src="https://dqmetricstorage.blob.core.windows.net/videos/Data Quality Metrics Stakeholder Session-2019.09.03.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="collapse mt-2" id="shs-20190904">
+                        <h4 style="font-size:1.15rem;">Data Quality Metrics Stakeholder Session - 2019.09.04</h4>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video class="embed-responsive-item" controls>
+                                <source src="https://dqmetricstorage.blob.core.windows.net/videos/Data Quality Metrics Stakeholder Session-2019.09.04.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="collapse mt-2" id="shs-20190906-am">
+                        <h4 style="font-size:1.15rem;">Data Quality Metrics Stakeholder Session - 2019.09.06 am</h4>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video class="embed-responsive-item" controls>
+                                <source src="https://dqmetricstorage.blob.core.windows.net/videos/Data Quality Metrics Stakeholder Session_2019.09.06 AM.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                    <div class="collapse" id="shs-20190906-pm">
+                        <h4 style="font-size:1.15rem;">Data Quality Metrics Stakeholder Session - 2019.09.06 pm</h4>
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <video class="embed-responsive-item" controls>
+                                <source src="https://dqmetricstorage.blob.core.windows.net/videos/Data Quality Metrics Stakeholder Session_2019.09.06 PM.mp4" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="technical-resources" class="card mt-1">
+            <div class="card-header" id="h-4">
+                <h3 class="card-subtitle"><button class="btn btn-link" type="button" aria-expanded="true" aria-controls="c-4" data-toggle="collapse" data-target="#c-4" style="font-size:inherit;">Technical Resources</button></h3>
+            </div>
+            <div id="c-4" class="collapse show" aria-labelledby="h-4">
+                <article class="m-3">
+                    <details>
+                        <summary class="h4 text-primary font-weight-normal" style="font-size:1.25rem;">How to author a Metric</summary>
+                        <ul>
+                            <li><p>Navigate to the Metrics page to review existing metrics</p><img class="img-fluid shadow-sm border mb-2" src="~/assets/Metric Page - Author Metric.png" /></li>
+                            <li>
+                                To submit a new metric, click “Author a Metric” and begin by entering a brief description of the metric.  You can then select the Results Type, Domain, and DQ Harmonization Category from the drop-down menus.<br />
+                                <strong>** Note:</strong> You must be logged in  and have permission to "Author Metrics" to see the menu item and button. If you do not see either, please enter a request at the Service Desk for permission. <strong>**</strong>
+                            </li>
+                            <li>
+                                A list of similar existing metrics will populate the panel below based on the information entered for you to review.  Please confirm that this is a new metric and not a duplicate of an existing metric. <br />
+                                <img class="img-fluid shadow-sm border mb-2" src="~/assets/Author Metric - example of similar metrics in system.png" />
+                            </li>
+                            <li>
+                                Click “Save and Continue”  to move to the Metrics Details form and fill out the following fields:
+                                <ul>
+                                    <li>Description – details on the purpose of the metric (required)</li>
+                                    <li>Justification – additional context or reasoning for the creation of the metric (required)</li>
+                                    <li>Expected Results - description of what the author is expecting as a result of executing the metric against a data source  (required)</li>
+                                    <li>Jira # for public comments – a ticket will be created to enable discussion on the specific metric</li>
+                                    <li>Support Documents - upload any supporting documentation and/or examples.</li>
+                                </ul>
+                            </li>
+                            <li>Once the details of the metric have been filled in, select “Save and Continue”</li>
+                            <li>On the Metric Summary page, choose to either “Submit for Review” or “Save Draft”.  You will be able view all of your submitted and draft metrics on your Dashboard.</li>
+                            <li>For more information, please see the <a id="lnkV1" class="link-style" href="#shs-20190903">“Authoring Data Quality Metrics” stakeholder video session</a> or reach out via @Html.Raw(serviceDeskUrl).</li>
+                        </ul>
+                    </details>
+                    <hr />
+                    <details>
+                        <summary class="h4 text-primary font-weight-normal" style="font-size:1.25rem;">How to submit Measures via the Portal or the API</summary>
+                        <h5>Using a Template Via the Portal</h5>
+                        <ul>
+                            <li><p>Navigate to the Metrics page to select a metric of interest.  Once selected, scroll down the metric description to locate the attached Measure template.  See screenshot below.</p><img class="img-fluid shadow-sm border mb-2" src="~/assets/Metric Page - Measure Submission Template.png" /></li>
+                            <li>For more information, please see the <a id="lnkV2" class="link-style" href="#shs-20190906-am">"Exploring Database Fingerprints" stakeholder session videos</a> or reach out via the @Html.Raw(serviceDeskUrl).</li>
+                            <li><strong>**</strong> Note: You must be logged in  and have permission to "Submit Measures" to see the templates. If you do not see the templates, please enter a request at the @Html.Raw(serviceDeskUrl) for permission. <strong>**</strong></li>
+                        </ul>
+                        <p>Measures are the quantitative representation of a Metric. A measure submission is comprised of metadata describing attributes of the dataset. These attributes describe things like the associated metric, Organization and DataSource, the run date, and dataset date range. A measure submission can be in the format of a Microsoft Excel or json document; a template including the metric identifier and expected results type can be downloaded from the metric's detail page.</p>
+                        <p>A measure submission is comprised of the following:</p>
+                        <table class="table table-striped">
+                            <caption style="caption-side:top;">Metadata:</caption>
+                            <tbody>
+                                <tr>
+                                    <td class="required">MetricID</td>
+                                    <td>The metric identifier which can be obtained from the metric details page.</td>
+                                </tr>
+                                <tr>
+                                    <td>OrganizationID</td>
+                                    <td>The GUID of the Organization which can be obtained from CNDS (optional).</td>
+                                </tr>
+                                <tr class="required">
+                                    <td>Organization</td>
+                                    <td>The name of the Organization.</td>
+                                </tr>
+                                <tr>
+                                    <td>DataSourceID</td>
+                                    <td>The GUID of the DataSource which can be obtained from CNDS (optional)</td>
+                                </tr>
+                                <tr>
+                                    <td class="required">DataSource</td>
+                                    <td>The name of the DataSource.</td>
+                                </tr>
+                                <tr>
+                                    <td class="required">Run Date</td>
+                                    <td>The date the data for the Measure was obtained.</td>
+                                </tr>
+                                <tr>
+                                    <td>Network</td>
+                                    <td>The network the DataSource/Organization belong to (optional).</td>
+                                </tr>
+                                <tr>
+                                    <td>Common Data Model</td>
+                                    <td>The Common Data Model (optional).</td>
+                                </tr>
+                                <tr>
+                                    <td>Common Data Model Version</td>
+                                    <td>The Version Number of the Common Data Model (optional)</td>
+                                </tr>
+                                <tr>
+                                    <td>Database System</td>
+                                    <td>Information about the database the data was queried from (optional).</td>
+                                </tr>
+                                <tr>
+                                    <td>Date Range Start</td>
+                                    <td>The starting date the dataset encompasses, must be earlier than the Date Range End.</td>
+                                </tr>
+                                <tr>
+                                    <td>Date Range End</td>
+                                    <td>The ending date the dataset encompasses, must be greater than the Date Range Start.</td>
+                                </tr>
+                                <tr>
+                                    <td>Results Type</td>
+                                    <td>The Results Type of the metric, must be a valid results type and match the results type of the metric the measure is for.</td>
+                                </tr>
+                                <tr>
+                                    <td>Results Delimiter</td>
+                                    <td>The Delimiter within the Results (optional)</td>
+                                </tr>
+                                <tr>
+                                    <td>Supporting Resources</td>
+                                    <td>A url to a location containing any supporting resources, code and/or documentation, used to execute the query for this Measure.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-striped">
+                            <caption style="caption-side:top;">Measure:</caption>
+                            <tbody>
+                                <tr>
+                                    <td>Raw Value</td>
+                                    <td>The predefined value-set. For example, a SEX value set may contain the following: “M”, “F”, “A”, “OT”</td>
+                                </tr>
+                                <tr>
+                                    <td>Definition</td>
+                                    <td>Descriptive text for the raw values. Following the above example, the definition for each raw value would be: “Male”, “Female”, “Ambiguous”, and “Other” respectively.</td>
+                                </tr>
+                                <tr>
+                                    <td>Measure</td>
+                                    <td>Based on the result type (count vs. percentage); result or answer to the metric of interest.</td>
+                                </tr>
+                                <tr>
+                                    <td>Total</td>
+                                    <td>Overall count/percentage of Measures</td>
+                                </tr>                              
+                            </tbody>
+                        </table>
+                        <div>
+                            <p>All dates must be formatted in the "year-month-day" numeric format: yyyy-MM-dd. All dates will be treated as local, and displayed as local without any timezone information taken into account. The excel template contains definitions for each metadata attribute and are applicable to the json template.</p>
+                            <p>Excel template:</p>
+                            <ul>
+                                <li>Tab 1 contains the metadata for the measure submission. Tab 2 the measure dataset. </li>
+                                <li>The format of the document must stay the same as the template.</li>
+                            </ul>
+                            <p>Json template:</p>
+                            <ul>
+                                <li>The same required properties as the Excel template must be completed.</li>
+                                <li>The names of the properties are the same as the Excel template except without spaces.</li>
+                            </ul>
+                            <p>
+                                After completing the template, navigate to @Html.Raw(submitMeasuresLink) and follow the instructions to upload the measure submission. Keep a copy of your measure submission template, the uploaded files are not stored by DQM after being processed.<br />
+                                Details about your submissions can be found on your @Html.Raw(dashboardLink).<br />
+                                If you need a submission removed please enter a request at the @Html.Raw(serviceDeskUrl).
+                            </p>
+                        </div>
+                        <h5>Submitting Directly to the API</h5>
+                        <div class="m-2 mt-0">
+                            <p>Measures can be submitted directly to the API via HTTP POST to the "/api/measures/submit" endpoint. The endpoint will validate the user based on credentials specified in the Authorization header attribute of the HTTP request. The credentials will be Base64 encrypted and in the Basic format, standard Basic Authentication process.</p>
+                            <ol>
+                                <li>The user is authenticated and confirmation of the Submit Measures permission is performed.</li>
+                                <li>The body of the post is assumed to be the json version of the measure submission template.</li>
+                                <li>If the submission does not pass content validation and error response is returned and the submission terminated.</li>
+                                <li>If validation is successful the measure submission is persisted to the database, and a success response is returned.</li>
+                            </ol>
+                            <p>When submitting directly to the API only json is accepted.</p>
+                            <div class="card">
+                                <div class="card-title bg-dark text-white pl-2"><strong>C# Sample Posting a JSON File</strong></div>
+                                <div>
+                                    <pre class="card-body pt-0">
+<code>using (var http = new System.Net.Http.HttpClient())
+{
+    http.DefaultRequestHeaders.Accept.Add(System.Net.Http.Headers.MediaTypeWithQualityHeaderValue.Parse("application/json"));
+    http.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", Convert.ToBase64String(Encoding.Default.GetBytes("{username}:{password}")));
+
+    try
+    {
+        using (var stream = System.IO.File.OpenRead(@@"C:\path\to\MeasureSubmission.json"))
+        {
+            var content = new System.Net.Http.StreamContent(stream);
+            content.Headers.Add("Content-Type", "application/json");
+
+            var result = await http.PostAsync("https://dataquality.healthdatacollaboration.net/api/measures/submit", content);
+
+            if (!result.IsSuccessStatusCode)
+            {
+                string error = await result.Content.ReadAsStringAsync();
+                System.Diagnostics.Debug.WriteLine(error);
+            }
+        }
+    }
+    catch (System.Net.WebException webex)
+    {
+        using (var reader = new StreamReader(webex.Response.GetResponseStream()))
+        {
+            System.Diagnostics.Debug.WriteLine(await reader.ReadToEndAsync());
+        }
+    }
+}</code></pre>
+                                </div>
+                            </div>
+
+                        </div>
+                    </details>
+                </article>
+                <div class="card-header">
+                    <h3 class="card-subtitle" style="font-size:1.25rem;">Open Source Software</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-text">
+                        The Data Quality Metrics (DQM) system was implemented and made available as open source technology. The open source code for the DQM system was posted on GitHub in a repository with accompanying technical and user documentation for public access found here:
+                        <a target="_blank" href="https://github.com/PopMedNet-Team/DataQualityMetrics">https://github.com/PopMedNet-Team/DataQualityMetrics <i class="fas fa-external-link-alt"></i></a>
+                    </p>
+                </div>
+                <div class="card-header">
+                    <h3 class="card-subtitle" style="font-size:1.25rem;">FHIR</h3>
+                </div>
+                <div class="card-body">
+                    <p class="card-body">The data structure for DQ metrics and measure results, later referred to as ‘payload’, was codified to a common format that is not data model specific and allows for application portability and interoperability. JSON was selected as the language to express the metrics and results, though XML, BSON, or the next new flavor of structured data formatting would have been other options. Additionally, we have investigated the potential of leveraging parts of the data structure defined by the <a target="_blank" href="https://www.hl7.org/fhir/overview.html">Fast Healthcare Interoperability Resources (FHIR) standards <i class="fas fa-external-link-alt"></i></a>. The FHIR standards are utilized for the transfer of electronic healthcare information based on existing logical models and can be extended for specific purposes. While this project does not formally use FHIR services, there may be opportunities in the future to structure the DQ payload in ways that align with current FHIR data structures.</p>
+                </div>
+            </div>
+        </section>
+        <section id="visualizations" class="card mt-1">
+            <div class="card-header" id="h-5">
+                <h3 class="card-subtitle"><button class="btn btn-link" type="button" aria-expanded="true" aria-controls="c-5" data-toggle="collapse" data-target="#c-5" style="font-size:inherit;">Visualizations</button></h3>
+            </div>
+            <div id="c-5" class="collapse show" aria-labelledby="h-5">
+                <div class="card-body">
+                    <p class="card-text">Qlik Sense was selected as the visualization tool for users to explore the characteristics of data sources. Qlik can connect to data sources using standard APIs, and the assumption is that other analytic tools able to load data via an API (e.g. Tableau) could be used in place of Qlik. Technical documentation on Qlik and the available APIs are posted in the GitHub repository: <a target="_blank" href="https://github.com/PopMedNet-Team/DataQualityMetrics">https://github.com/PopMedNet-Team/DataQualityMetrics <i class="fas fa-external-link-alt"></i></a></p>
+                    <p class="card-text">To see current Qlik visualizations for DQM, please navigate to <a href="/visualizations">Explore DQM</a>.</p>
+                </div>
+            </div>                
+        </section>
+        <section id="data-model" class="card mt-1">
+            <div class="card-header" id="h-6">
+                <h3 class="card-subtitle"><button class="btn btn-link" type="button" aria-expanded="true" aria-controls="c-6" data-toggle="collapse" data-target="#c-6" style="font-size:inherit;">Data Model</button></h3>
+            </div>
+            <div id="c-6" class="collapse show" aria-labelledby="h-6">
+                <div class="card-body">
+                    <p class="card-text">Through exploration of existing practice and published work, the project team developed the Data Quality Data Model that underlies the DQM system and captures items of interest (metadata) describing the source system, its measures, and each metric.  The data model, database diagram, and other relevant documentation can be found in the DQM GitHub repository here: <a target="_blank" href="https://github.com/PopMedNet-Team/DataQualityMetrics">https://github.com/PopMedNet-Team/DataQualityMetrics <i class="fas fa-external-link-alt"></i></a></p>
+                </div>
+            </div>            
+        </section>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript">
+        $("#lnkV1").click(function (e) {
+            e.preventDefault();
+            let scrollToElement = document.getElementById("shs-20190903");
+            if (!$(scrollToElement).hasClass("show")) {
+                $(scrollToElement).addClass("show");
+            }
+            scrollToElement.scrollIntoView();
+        });
+
+        $("#lnkV2").click(function (e) {
+            e.preventDefault();
+            let scrollToElement = document.getElementById("shs-20190906-am");
+            if (!$(scrollToElement).hasClass("show")) {
+                $(scrollToElement).addClass("show");
+            }
+            scrollToElement.scrollIntoView();
+        });
+    </script>
+}

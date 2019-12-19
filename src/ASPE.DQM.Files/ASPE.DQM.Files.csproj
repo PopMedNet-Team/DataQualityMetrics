@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="AzureDataLakeFileService.cs" />
+    <Compile Remove="AzureFileStorageFileService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="AzureDataLakeFileService.cs" />
+    <None Include="AzureFileStorageFileService.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.1" />
+    <PackageReference Include="Microsoft.Azure.Storage.File" Version="11.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ASPE.DQM.Data\ASPE.DQM.Data.csproj" />
+  </ItemGroup>
+
+</Project>

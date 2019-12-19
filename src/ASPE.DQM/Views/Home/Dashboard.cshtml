@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewData["Title"] = "My Dashboard";
+}
+
+<section id="vue_dashboard" ref="dashboard_ref" style="min-width:23rem;">
+    <div class="row justify-content-sm-center">
+        <div class="col-12 my-3" id="vue_metrics" prefix="metrics_ref">
+            <div class="card">
+                <div class="card-header">
+                    <h5>My Metrics</h5>
+
+                </div>
+                @if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.AuthorMetric_Key)).Succeeded)
+                {
+                    <div class="card-body p-0" v-show="loading == false" style="display:none;">
+                        <div class="bg-light p-2">
+                            Show <kendo-dropdownlist id="cmbMetricStatuses" name="cmbMetricStatuses"
+                                                     v-model="selectedStatusID"
+                                                     :data-source="statuses"
+                                                     :data-text-field="'text'"
+                                                     :data-value-field="'value'"
+                                                     :value-primitive="true"
+                                                     :auto-width="false">
+                            </kendo-dropdownlist>
+                        </div>
+                        <div v-if="!metrics.length" class="card float-left" style="margin: 0.25rem;min-width:20rem;max-width:35rem;">
+                            <div class="card-body py-1">
+                                <div class="row">
+                                    <p>You have not authored any metrics.  If you wish to do so, please navigate to the List Metrics page <a href="/metrics">here</a>.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                                <tr v-for="metric in filteredMetrics">
+                                    <td><a :href="'/metric/' + metric.id">{{metric.title}}</a></td>
+                                    <td>{{ metric.status.metricStatusID | statusText }}</td>
+                                    <td>{{ metric.status.createOn | localDateString }}</td>
+                                </tr>
+                            </tbody>                            
+                        </table>
+                    </div>
+                    <div class="card-body" v-show="loading">
+                        <div class="d-flex justify-content-center">
+                            <img src="~/assets/loading.gif" height="40" />
+                            <span style="padding-left:8px;font-weight:bold;color:dimgray;height:40px;" class="align-middle pt-2">Loading your metrics...</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-body p-0">
+                        <div class="row" style="margin-left:1.5rem;">
+                            <p>You do not have permission to author metrics. If you wish to do so, please contact <b>TBD</b></p>
+                        </div>
+                    </div>
+                }
+
+            </div>
+        </div>
+        <div class="col-12 my-3" id="vue_measures" prefix="measures_ref">
+            <div class="card">
+                <div class="card-header">
+                    <h5>My Measures</h5>
+                </div>
+                @if ((await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded)
+                {
+                    <div class="card-body p-1" v-show="loading == false" style="display:none;">
+                        <Grid :data-items="measures"
+                              :columns="columns"
+                              :scrollable="scrollable"
+                              :sortable="sortable"
+                              :sort="sort"
+                              :style="gridStyle"
+                              :detail="cellTemplate"
+                              @@sortchange="sortChangeHandler"
+                              @@expandchange="expandChange"
+                              :expand-field="'expanded'">
+                        </Grid>
+                    </div>
+                    <div class="card-body" v-show="loading">
+                        <div class="d-flex justify-content-center">
+                            <img src="~/assets/loading.gif" height="40" />
+                            <span style="padding-left:8px;font-weight:bold;color:dimgray;height:40px;" class="align-middle pt-2">Loading your submitted measures...</span>
+                        </div>
+                    </div>
+                }
+                else
+                {
+                    <div class="card-body p-1">
+                        <div class="row" style="margin-left:1.5rem;">
+                            <p>You do not have permission to submit metrics. If you wish to do so, please contact <b>TBD</b></p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="row justify-content-sm-center">
+        <div class="col-12 col-md-6 my-3" id="vue_visualization" prefix="visualization_ref">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right"><i class="fas fa-bookmark pt-2" style="font-size:1.5em;color:#476b9e;"></i></div>
+                    <h5>Visualizations</h5>
+                </div>
+                <div class="card-body p-0" v-show="loading == false" style="display:none;">
+                    <div v-if="!visualizations.length">
+                        <div class="card-body">
+                            <div class="row">
+                                <p class="mx-3 my-1">You have not bookmarked any visualizations.  If you wish to do so, please navigate to a visualization and click on the bookmark icon in the top right of the page.<br /><a href="/visualizations" class="btn btn-primary mt-2">Explore DQM</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="visualizations.length > 0">
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                                <tr v-for="visual in visualizations">
+                                    <td><a :href="'/visual/' + visual.visualizationID">{{ visual.title }}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="card-body" v-show="loading">
+                    <div class="d-flex justify-content-center">
+                        <img src="~/assets/loading.gif" height="40" />
+                        <span style="padding-left:8px;font-weight:bold;color:dimgray;height:40px;" class="align-middle pt-2">Loading bookmarked visualizations...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 my-3" id="vue_favorite_metrics" prefix="favorite_metrics_ref">
+            <div class="card">
+                <div class="card-header">
+                    <div class="float-right"><i class="fas fa-bookmark pt-2" style="font-size:1.5em;color:#476b9e;"></i></div>
+                    <h5>Bookmarked Metrics</h5>
+                </div>
+                <div class="card-body p-0" v-show="loading == false" style="display:none;">
+                    <div v-if="!metrics.length">
+                        <div class="card-body">
+                            <div class="row">
+                                <p class="mx-3 my-1">You have not bookmarked any metrics.  If you wish to do so, please navigate to a metric and click on the bookmark icon in the top right of the page.<br /><a href="/metrics" class="btn btn-primary mt-2">Metrics</a></p>
+                            </div>
+                        </div>
+                    </div>
+                    <div v-if="metrics.length > 0">
+                        <table class="table table-striped table-hover">
+                            <tbody>
+                                <tr v-for="metric in metrics">
+                                    <td><a :href="'/metric/' + metric.metricID">{{ metric.title }}</a></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+                <div class="card-body" v-show="loading">
+                    <div class="d-flex justify-content-center">
+                        <img src="~/assets/loading.gif" height="40" />
+                        <span style="padding-left:8px;font-weight:bold;color:dimgray;height:40px;" class="align-middle pt-2">Loading bookmarked metrics...</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</section>
+@section Head{ 
+    <style>
+        .measuremeta-details {
+        }
+        .measuremeta-details .col {
+            text-align:left;
+        }
+        .measuremeta-details label {
+            font-weight:bold;
+        }
+        .measuremeta-details .evenItem {
+        }
+    </style>
+}
+@section Scripts {
+    <script src="~/scripts/dashboard.js"></script>
+}
+

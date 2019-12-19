@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewData["Title"] = "Test";
+}
+
+<section id="testVue">
+    <div class="card">
+        <h5 class="card-title">Upload Control</h5>
+        <file-upload save-url="/api/Documents/Upload" :auto-upload="true" :item-id="'11111111-1111-1111-1111-111111111111'"></file-upload>
+
+        <h5 class="card-title">Upload List Control</h5>
+        <file-list save-url="/api/Documents/List" :show-delete="true" :item-id="'11111111-1111-1111-1111-111111111111'"></file-list>
+    </div>
+</section>
+<script src="~/Scripts/Test.js"></script>

@@ -1,0 +1,21 @@
+﻿@{
+    string returnUrl = User.Identity.IsAuthenticated ? string.Empty : this.Context.Request.Query.Where(k => k.Key == "ReturnUrl").Select(k => k.Value.ToString()).FirstOrDefault();
+}
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <div id="vue_loggedin">
+        <button class="btn btn-link" v-on:click="onTriggerShowProfile"><i class="fas fa-user-circle"></i> @User.Identity.Name</button>
+        <button class="btn btn-link" v-on:click="onTriggerLogout"> Logout</button>
+        <user-dialog ref="user_dialog"></user-dialog>
+    </div>
+}
+else
+{  
+<div id="vue_login">
+    <button type="button" class="btn btn-link" v-on:click="onTriggerLogin"><i class="fas fa-user-circle"></i> Login</button>
+    <a href="/registration" class="btn btn-link">Register</a>
+    <login-dialog :return-url="'@Html.Raw(returnUrl)'" ref="login_dialog"></login-dialog>
+</div>
+}

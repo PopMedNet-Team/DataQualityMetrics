@@ -1,0 +1,47 @@
+﻿
+@{
+    ViewData["Title"] = "Manage Submitted Measures";
+}
+
+@if ((await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SystemAdministrator_Key)).Succeeded)
+{
+    <div id="PageLoadingMessage">
+        <div style="width:350px;margin-left:auto;margin-right:auto;margin-top:50px;">
+            <div class="panel panel-default">
+                <div class="panel-body" style="text-align:center;padding:24px;">
+                    <img src="~/assets/loading.gif" height="40" />
+                    <span style="padding-left:8px;font-weight:bold;color:dimgray">Loading details...</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <section id="vue_mangage_measures" prefix="measures_ref" v-show="true" style="overflow:auto;display:none;padding-top:1.5rem;">
+        <div class="card">
+            <h1 class="card-header">Manage Measures</h1>
+            <div class="card-body">
+                <Grid :data-items="result"
+                      :columns="columns"
+                      :scrollable="scrollable"
+                      :sortable="sortable"
+                      :sort="sort"
+                      :style="gridStyle"
+                      @@sortchange="sortChangeHandler"
+                      @@edit="edit"
+                      @@remove="remove">
+                </Grid>
+            </div>
+        </div>
+    </section>
+    <script src="~/scripts/measures-manage.js" asp-append-version="true"></script>
+}
+else
+{
+    <div class="card" style="margin-top:1.5rem">
+        <h1 class="card-header">Manage Measures</h1>
+        <div class="card-body">
+            <p class="alert alert-warning align-content-center">You must be authorized to view this page.</p>
+        </div>
+    </div>
+}
+
+

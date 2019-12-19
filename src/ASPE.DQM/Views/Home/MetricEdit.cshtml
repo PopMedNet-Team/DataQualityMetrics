@@ -1,0 +1,179 @@
+﻿
+@{
+    ViewData["Title"] = ViewBag.MetricTitle;
+}
+@section Head{<link rel="stylesheet" href="~/css/metric-details.css" />}
+
+<form id="vue_metric_edit" ref="metric_edit_ref" data-itemid="@ViewBag.ID" v-kendo-validator="validationRules" v-on:submit.prevent v-show="true" style="display:none;">
+    <div class="card" style="margin-top:1.5rem">
+        <div class="card-header">
+            <h5>Edit Metric: {{metric.title}}</h5>
+        </div>
+        <div class="card-body">
+            <div class="container-fluid">
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="txtTitle">Title<span class="required">*</span></label>
+                        <input type="text" class="form-control" id="txtTitle" name="txtTitle" v-model="metric.title" required validationMessage="Title is required" />
+                        <span data-for="txtTitle" class="k-invalid-mgs"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="txtDescription">Description<span class="required">*</span></label>
+                        <kendo-editor id="txtDescription" name="txtDescription"
+                                      :tag="'div'"
+                                      ref="description_editor"
+                                      :value="metric.description"
+                                      :paste-cleanup="pasteCleanup"
+                                      :tools="toolbar"
+                                      v-on:change="onEditorChange"
+                                      data-requiredEditor-msg="Description is required"
+                                      class="form-control"
+                                      style="height:initial;border:1px solid #ced4da;border-radius:0.25rem;padding:0.3rem;">
+                        </kendo-editor>
+                        <span data-for="txtDescription" class="k-invalid-mgs"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="txtJustification">Justification<span class="required">*</span></label>
+                        <kendo-editor id="txtJustification" name="txtJustification"
+                                      :tag="'div'"
+                                      ref="justification_editor"
+                                      :resizable-content="true"
+                                      :value="metric.justification"
+                                      :paste-cleanup="pasteCleanup"
+                                      :tools="toolbar"
+                                      v-on:change="onEditorChange"
+                                      data-requiredEditor-msg="Justification is required"
+                                      class="form-control"
+                                      style="height:initial;border:1px solid #ced4da;border-radius:0.25rem;padding:0.3rem;">
+                        </kendo-editor>
+                        <span data-for="txtJustification" class="k-invalid-mgs"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="txtExpectedResults">Expected Results<span class="required">*</span></label>
+                        <kendo-editor id="txtExpectedResults" name="txtExpectedResults"
+                                      :tag="'div'"
+                                      ref="expectedResults_editor"
+                                      :resizable-content="true"
+                                      :value="metric.expectedResults"
+                                      :paste-cleanup="pasteCleanup"
+                                      :tools="toolbar"
+                                      v-on:change="onEditorChange"
+                                      data-requiredEditor-msg="Expected Results is required"
+                                      class="form-control"
+                                      style="height:initial;border:1px solid #ced4da;border-radius:0.25rem;padding:0.3rem;">
+                        </kendo-editor>
+                        <span data-for="txtExpectedResults" class="k-invalid-mgs"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md col-12">
+                        <label for="cmbResultsType" style="display:block;">Results Type<span class="required">*</span></label>
+                        <kendo-dropdownlist id="cmbResultsType" name="cmbResultsType"
+                                            v-model="metric.resultsTypeID"
+                                            :data-source="dependencies.resultsTypes"
+                                            :data-text-field="'value'"
+                                            :data-value-field="'id'"
+                                            :auto-width="false"
+                                            required="required">
+                        </kendo-dropdownlist>
+                        <span data-for="cmbResultsType" class="k-invalid-mgs d-block"></span>
+                    </div>
+                    <div class="col-md col-12">
+                        <label for="cmbDomains">Domain<span class="required">*</span></label>
+                        <kendo-multiselect id="cmbDomains" name="cmbDomains"
+                                           ref="domains_multiselect"
+                                           v-model="metric.domains"
+                                           :data-source="dependencies.domains"
+                                           :data-text-field="'title'"
+                                           :data-value-field="'id'"
+                                           :placeholder="'Select Domains...'"
+                                           :filter="'contains'"
+                                           @@change="onEditorChange"
+                                           data-requiredEditor-msg="At least one Domain is required">
+                        </kendo-multiselect>
+                        <span data-for="cmbDomains" class="k-invalid-mgs d-block"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="cmbFrameworkCategories">DQ Harmonization Category<span class="required">*</span></label>
+                        <kendo-multiselect id="cmbFrameworkCategories" name="cmbFrameworkCategories"
+                                           ref="harmonization_category_multiselect"
+                                           v-model="metric.frameworkCategories"
+                                           :data-source="dependencies.frameworkCategories"
+                                           :data-text-field="'displayTitle'"
+                                           :data-value-field="'id'"
+                                           :placeholder="'Select Data Quality Framework Categories...'"
+                                           :filter="'contains'"
+                                           @@change="onEditorChange"
+                                           data-requiredEditor-msg="At least one Data Quality Framework Category is required">
+                        </kendo-multiselect>
+                        <span data-for="cmbFrameworkCategories" class="k-invalid-mgs d-block"></span>
+                    </div>
+                </div>                
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="txtJiraItem">Jira # for Public comments (full url)</label>
+                        <input type="text" class="form-control" id="txtJiraItem" v-model="metric.serviceDeskUrl" />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col">
+                        <label for="txtIdentifier">Identifier</label>
+                        <input type="text" readonly class="form-control" id="txtIdentifier" v-model="metric.id" />
+                    </div>
+                    <div class="col-sm">
+                        <label for="txtStatus">Status</label>
+                        <input type="text" readonly class="form-control" id="txtStatus" v-model="metric.statusText" />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        Author: {{metric.authorName || '&nbsp;'}}
+                    </div>
+                    <div class="col">Created: {{metric.createdOnLocal.toLocaleString()}}</div>
+                    <div class="col">Last Updated: {{metric.modifiedOnLocal.toLocaleString()}}</div>
+                </div>
+                <section style="margin-top:2rem;">
+                    <h5 class="card-title">Supporting Documents</h5>
+
+                    <file-upload save-url="/api/Documents/Upload" :auto-upload="true" :item-id="'@ViewBag.ID'"></file-upload>
+                    <file-list style="margin-top:2rem;" :list-endpoint="'/api/Documents/List'" :show-delete="true" :item-id="'@ViewBag.ID'"></file-list>
+                </section>
+            </div>
+
+
+
+        </div>
+        @*<div class="card-header">
+                <h5>Documents</h5>
+            </div>
+            <div class="card-body">
+                TODO: list any documents for the metric.
+            </div>*@
+        <div class="card-footer">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <div id="notification-container"></div>
+                        <kendo-notification ref="saveNotification" :auto-hide-after="kendoOptions.autoHideAfter" :position-top="kendoOptions.positionTop" :append-to="kendoOptions.appendTo" :width="kendoOptions.width" v-on:show="onShowSaveNotification"></kendo-notification>
+                        <button class="btn btn-primary mb-2" v-on:click.stop.prevent="onSave" id="btnSave">Save and Continue</button>
+                        <a class="btn btn-outline-secondary mb-2 ml-3" v-bind:href="'/metric/' + metric.id">Cancel Edit</a>
+                    </div>
+                    <div class="col" style="text-align:right;">
+                        <button class="btn btn-danger mb-2" v-on:click.stop="onDeleteMetric" v-if="canDelete">Delete</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>
+<script src="~/Scripts/metric-edit.js" asp-append-version="true"></script>
+
+

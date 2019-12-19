@@ -1,0 +1,72 @@
+﻿
+@{
+    ViewData["Title"] = "Submit Measure";
+}
+
+@if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded)
+{
+<section id="vue_submit_measures" ref="submit_measures_ref" class="container mt-3" style="display:none;" v-show="true">
+    <div class="card">
+        <div class="card-header"><h5>Submit Measure</h5></div>
+        <div class="card-body">
+            <div class="card mb-3">
+                <div class="card-body">
+                    <p class="card-text">Click the "Select File..." button and select the measure template to upload, or drag and drop the file into the area next to the button. After selecting the file to submit, click the "Upload" button. Only files that have the extension ".xlsx" or ".json" will be accepted. Refer to <a href="/resources#technical-resources">Resources: How to submit Measures</a> for more information on obtaining a measure template for a metric.</p>
+                    <p class="card-text">The submission will be validated, if validation fails all errors will be displayed. Upon successful validation a confirmation to complete the submission will be shown.</p>
+                </div>
+            </div>
+            <kendo-upload name="files"
+                            ref="upload"
+                            :multiple="false"
+                            :show-file-list="true"
+                            :async-auto-upload="false"
+                            :async-save-url="'/api/measures/upload'"
+                            :validation-allowed-extensions="kendoOptions.allowedExtensions"
+                            :async-chunk-size="25000000"
+                            :async-batch="false"
+                            :async-concurrent="false"
+                            :async-auto-retry-after="300"
+                            :async-max-auto-retries="0"
+                            :localization="kendoOptions.uploadLocalization"
+                            @@success="onUploadSuccess"
+                            @@error="onUploadError">
+            </kendo-upload>
+
+            <div class="alert alert-info mt-3" v-show="lastUploadedMetric.length > 0" style="display:none;">
+                <p>Upload of Measure for <strong>"{{ lastUploadedMetric }}"</strong> was successful.<br />You can view a list of the Measures you have uploaded on your <a href="/my-dashboard">Dashboard</a>, or you can upload another Measure.</p>
+            </div>
+
+        </div>
+    </div>
+
+    <kendo-dialog ref="confirmationDialog"
+                    :modal="true"
+                    :title="'Confirm Measure Upload'"
+                    :closable="false"
+                    :visible="false">
+        <div>
+            <p class="alert alert-warning">
+                Continue with upload of Measure for Metric:
+                <br />"{{ uploadResponse.metricName }}"?
+            </p>
+        </div>
+        <kendo-dialog-action :text="'Continue'" :action="onContinueUpload"></kendo-dialog-action>
+        <kendo-dialog-action :text="'Cancel'" :primary="true" :action="onCancelUpload"></kendo-dialog-action>
+    </kendo-dialog>
+
+
+</section>
+<script src="~/scripts/measures-submit.js"></script>
+}
+else
+{
+<section class="container mt-3">
+    <div class="card">
+        <div class="card-header">Submit Measure</div>
+        <div class="card-body">
+            <p class="todo-hint-text">Show text indicating the user needs to register if they have not already, and login to be able to submit a measure for a metric.</p>
+            <a href="/Registration">Link To Register</a>
+        </div>
+    </div>
+</section>
+}

@@ -1,0 +1,80 @@
+﻿@{
+    bool systemAdministrator = User.Identity.IsAuthenticated ? (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SystemAdministrator_Key)).Succeeded : false;
+    bool canSubmitMeasure = User.Identity.IsAuthenticated ? (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded : false;
+}
+<div class="sidebar-sticky collapse sidebar-collapse" id="sidebarContent">
+    <div class="sidebar-brand">
+        <a href="/">
+            <h1 class="branding-title">
+                <img src="~/assets/DQM-logo-icon-transparent.png" width="96" alt="Data Quality Metrics" class="dqm-icon" />
+                <span class="dqm-title">Data Quality Metrics</span>
+                <span class="dqm-title-sub"><span class="dqm-title-sub-first">A</span> <span class="dqm-title-sub-first">D</span>atabase <span class="dqm-title-sub-first">F</span>ingerprinting <span class="dqm-title-sub-first">F</span>ramework</span>
+            </h1>
+        </a>
+    </div>
+    <div>
+        <ul class="nav flex-column">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <li class="nav-item">
+                    <a class="nav-link sidebar-heading" href="/my-dashboard">Dashboard</a>
+                </li>
+            }
+            <li class="nav-item">
+                <a class="nav-link sidebar-heading" href="/resources">Resources</a>
+                @if (Url.ActionContext.HttpContext.Request.Path.StartsWithSegments(Microsoft.AspNetCore.Http.PathString.FromUriComponent("/resources"), StringComparison.OrdinalIgnoreCase))
+                {
+                    <ul class="nav flex-column sub-links">
+                        <li class="nav-item"><a class="nav-link" href="#framework-background">DQ Harmonization Framework Background</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#project-description">Project Description and Funding Sources</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#community">Community Engagement</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#technical-resources">Technical Resources</a></li>
+                        <li class="nav-item"><a class="nav-link" href="#visualizations">Visualizations</a></li>
+                    </ul>
+                }
+            </li>
+            <li class="nav-item">
+                <a class="nav-link sidebar-heading" href="/metrics">Metrics</a>
+                @if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.AuthorMetric_Key)).Succeeded)
+                {
+                    <ul class="nav flex-column sub-links">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/submit-metric">Author a Metric</a>
+                        </li>
+                    </ul>
+                }
+            </li>
+            <li class="nav-item">
+                <a class="nav-link sidebar-heading" href="/measures">Measures</a>
+                @if (systemAdministrator || canSubmitMeasure)
+                {
+                    <ul class="nav flex-column sub-links">
+                        @if (canSubmitMeasure)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/submit-measure">Submit Measures</a>
+                            </li>
+                        }
+                        @if (systemAdministrator)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" href="/manage-measures">Manage Submitted Measures</a>
+                            </li>
+                        }
+                    </ul>
+                }
+            </li>
+            <li class="nav-item">
+                <a class="nav-link sidebar-heading" href="/visualizations">Explore DQM</a>
+                @if (systemAdministrator)
+                {
+                    <ul class="nav flex-column sub-links">
+                        <li class="nav-item">
+                            <a class="nav-link" href="/register-visualization">Register Visualization</a>
+                        </li>
+                    </ul>
+                }
+            </li>
+        </ul>
+    </div>
+</div>

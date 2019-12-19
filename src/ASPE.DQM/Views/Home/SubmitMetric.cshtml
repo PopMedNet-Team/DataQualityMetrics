@@ -1,0 +1,130 @@
+﻿
+@{
+    ViewData["Title"] = "Submit Metric";
+}
+@section Head{<link rel="stylesheet" href="~/css/metric-details.css" />}
+@if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.AuthorMetric_Key)).Succeeded)
+{
+    <form id="vue_metric_submit" ref="metric_submit_ref" v-kendo-validator onsubmit="return false;" v-show="true" style="display:none;">
+        <div class="card">
+            <h1 class="card-header">Author a Metric</h1>
+            <div class="card-body">
+
+
+                <div class="container-fluid">
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="txtTitle">Title<span class="required">*</span></label>
+                            <input type="text" class="form-control" id="txtTitle" name="txtTitle" v-model="metric.title" required validationMessage="Title is required" />
+                            <span data-for="txtTitle" class="k-invalid-mgs"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col-md col-12">
+                            <label for="cmbResultsType" style="display:block;">Results Type<span class="required">*</span></label>
+                            <kendo-dropdownlist id="cmbResultsType" name="cmbResultsType"
+                                                v-model="metric.resultsTypeID"
+                                                :data-source="dependencies.resultsTypes"
+                                                :data-text-field="'value'"
+                                                :data-value-field="'id'"
+                                                :value-primitive="true"
+                                                :auto-width="false"
+                                                required="required">
+                            </kendo-dropdownlist>
+                            <span data-for="cmbResultsType" class="k-invalid-mgs d-block"></span>
+                        </div>
+                        <div class="col-md col-12">
+                            <label for="cmbDomains">Domain<span class="required">*</span></label>
+                            <kendo-multiselect id="cmbDomains" name="cmbDomains"
+                                               v-model="metric.domains"
+                                               :data-source="dependencies.domains"
+                                               :data-text-field="'title'"
+                                               :data-value-field="'id'"
+                                               :placeholder="'Select Domains...'"
+                                               :filter="'contains'"
+                                               required="required"
+                                               validationMessage="Please select at least one Domain">
+                            </kendo-multiselect>
+                            <span data-for="cmbDomains" class="k-invalid-mgs d-block"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <div class="col">
+                            <label for="cmbFrameworkCategories">DQ Harmonization Category<span class="required">*</span></label>
+                            <kendo-multiselect id="cmbFrameworkCategories" name="cmbFrameworkCategories"
+                                               v-model="metric.frameworkCategories"
+                                               :data-source="dependencies.frameworkCategories"
+                                               :data-text-field="'displayTitle'"
+                                               :data-value-field="'id'"
+                                               :placeholder="'Select Data Quality Framework Categories...'"
+                                               :filter="'contains'"
+                                               required="required"
+                                               validationMessage="Please select at least one Data Quality Framework Category">
+                            </kendo-multiselect>
+                            <span data-for="cmbFrameworkCategories" class="k-invalid-mgs d-block"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div v-if="similar.length > 0">
+                    <h5>Similar Existing Metrics</h5>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Metric</th>
+                                <th class="d-none d-md-table-cell">Results Type</th>
+                                <th class="d-none d-md-table-cell">Domain</th>
+                                <th class="d-none d-md-table-cell">DQ Harmonization Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="metric in similar">
+                                <td>
+                                    <a v-bind:href="'/metric/' + metric.id">{{ metric.title }}</a>
+                                </td>
+                                <td class="d-none d-md-table-cell">{{ metric.resultsType.value }}</td>
+                                <td class="d-none d-md-table-cell">
+                                    <div v-for="domain in metric.domains"><span>{{ domain.title }}</span></div>
+                                </td>
+                                <td class="d-none d-md-table-cell">
+                                    <div v-for="category in metric.frameworkCategories"><span>{{ category.displayTitle }}</span></div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+            <div class="card-footer">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <button class="btn btn-primary" v-on:click.stop="onSave">Save And Continue</button>
+                        </div>
+                        <div class="col" style="text-align:right;">
+                            <a class="btn btn-outline-secondary" href="/metrics/">Cancel</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+    <script src="~/Scripts/metric-submit.js" asp-append-version="true"></script>
+    
+}
+else
+{
+    <div class="card">
+        <h1 class="card-header">Author a Metric</h1>
+        <div class="card-body">
+            <p class="todo-hint-text">Show text indicating the user needs to register if they have not already, and login to be able to submit a metric specification.</p>
+            <a href="/Registration">Link To Register</a>
+        </div>
+    </div>
+}
+
+
+
+

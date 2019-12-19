@@ -1,0 +1,17 @@
+﻿## Reference for Migration Commands ##
+
+Add Migration:
+Add-Migration "migration name" -Context "DataContext to use" -OutputDir "Migrations/Model|SyncData|omit parameter for Identity context"
+
+Update Database:
+Update-Database -Context "DataContext to use" -Verbose (verbose is optional)
+
+
+Command-Line Reference:
+https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/
+
+Package Manager Console Command Reference:
+https://docs.microsoft.com/en-us/ef/core/miscellaneous/cli/powershell
+
+Multiple DataContext Providers:
+https://docs.microsoft.com/en-us/ef/core/managing-schemas/migrations/providers

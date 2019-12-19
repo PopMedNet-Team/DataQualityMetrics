@@ -1,0 +1,44 @@
+﻿@inject Microsoft.Extensions.Configuration.IConfiguration config
+@model VisualizationViewModel
+@{
+    ViewData["Title"] = "Visual";
+}
+@section Head{
+    <style type="text/css">
+        #qlikIframe {
+            border: none;
+            min-height: 500px;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+}
+    <div class="card visualization-card">
+        <div class="card-header">
+            @if (User.Identity.IsAuthenticated)
+            {
+                <div class="float-right">
+                    <button id="btnFavoriteToggle" data-visual-id="@Model.ID.ToString("D")" class="btn btn-link" title="Bookmark this visualization, click to toggle."><i id="bookmarkIcon" class="@Html.Raw(Model.Bookmarked ? "fas" : "far") fa-bookmark mt-2" style="font-size:2em;color:#476b9e;"></i></button>
+                </div>
+                <script src="~/scripts/visual.js" asp-append-version="true"></script>
+            }
+            <h2>@Model.Title</h2>
+        </div>
+        @if (Model.RequiresAuthentication == false || User.Identity.IsAuthenticated)
+        {
+            <div class="card-body p-0 mb-5">
+                @if (!string.IsNullOrWhiteSpace(Model.Description))
+                {<div class="p-2" style="border-bottom:1px solid rgba(0,0,0,0.125)">@Model.Description</div>}
+                <iframe id="qlikIframe" src="@Model.EmbedUrl"></iframe>
+            </div>
+        }
+        else
+        {
+            <div class="card-body">
+                <p class="alert alert-warning align-content-center">You must be logged in to view this visualization.</p>
+            </div>
+        }
+    </div>
+
+
+

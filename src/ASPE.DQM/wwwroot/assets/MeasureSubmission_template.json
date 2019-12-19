@@ -1,0 +1,25 @@
+{
+  "metricID": null,
+  "organizationID": null,
+  "organization": "",
+  "dataSourceID": null,
+  "dataSource": "",
+  "runDate": null,
+  "network": "",
+  "commonDataModel": "",
+  "databaseSystem": "",
+  "dateRangeStart": null,
+  "dateRangeEnd": null,
+  "commonDataModelVersion": null,
+  "resultsDelimiter": null,
+  "resultsType": "count|percentage|range|vector",
+  "supportingResources": "",
+  "measures": [
+    {
+      "rawValue": "",
+      "displayValue": "",
+      "measure": 0,
+      "total": 0
+    }
+  ]
+}

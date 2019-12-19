@@ -1,0 +1,71 @@
+﻿@{
+    ViewData["Title"] = "Metrics";
+    string serviceDeskUrl = "<a target=\"_blank\" href=\"https://popmednet.atlassian.net/servicedesk/customer/portal/6\" style=\"white-space:nowrap;\">DQM Service Desk <i class=\"fas fa-external-link-alt\"></i></a>";
+}
+
+<section>
+    <div class="card" style="margin-top:1.5rem;min-width:950px;">
+        <div class="card-header">
+            <h2>Metrics</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-primary" role="alert">
+                <p class="p-0 m-0">Metrics are the descriptions of quantitative measurements that can be executed on data sources to characterize a specific aspect of the source data in a data model agnostic way. The DQM tool captures metadata about each Metric in a standardized way, regardless of the context or use cases. Metric authors describe the metric in enough detail for a data holder to interpret and generate the results of the Metric from their source data. These results, or measures, enable apples-to-apples comparisons across data sources irrespective of the CDM or data structure.</p>
+            </div>
+            <div class="card mb-2">
+                <div class="card-body">
+                    <h3 class="card-title" style="font-size:1.15rem;">How to author a Metric</h3>
+                    <p class="card-text">In order to author metrics, you must have a user account that has been granted access.  Please click on ‘Register’ in the upper right-hand corner to register for an account.  If you already have an account, but do not have the ability to author metrics, please enter a request into our @Html.Raw(serviceDeskUrl).</p>
+                    <p class="card-text">First, login to your user account that has been granted the ability to author metrics. Review existing metrics below. To submit a new metric, click “Author a Metric” and begin by entering a brief description of the metric. You can then select the Results Type, Domain, and DQ Harmonization Category from the drop-down menus.</p>
+                    <ul>
+                        <li>A list of similar existing metrics will populate the panel below based on the information entered for you to review. Please confirm that this is a new metric and not a duplicate of an existing metric.</li>
+                        <li>Click “Save and Continue” to move to the Metrics Details form and fill out the following optional fields:
+                            <ul>
+                                <li>Description - details on the purpose of the metric</li>
+                                <li>Justification - additional context or reasoning for the create of the metric</li>
+                                <li>Expected Results –description of what the author is expecting as a result of executing the metric against a data source</li>
+                                <li>JIRA # for Public Comments –a ticket will be created to enable discussion on the specific metric </li>
+                            </ul>
+                        </li>
+                        <li>Once the details of the metric have been filled in, select “Save and Continue” </li>
+                        <li>On the Metric Summary page, choose to either “Submit for Review” or “Save Draft”. You will be able view all of your submitted and draft metrics on your Dashboard. </li>
+                    </ul>
+                    <p>For more information, please see the <a href="/resources#technical-resources">Resources page</a>.</p>
+                </div>
+            </div>
+            <div id="PageLoadingMessage">
+                <div style="width:350px;margin-left:auto;margin-right:auto;margin-top:50px;">
+                    <div class="panel panel-default">
+                        <div class="panel-body" style="text-align:center;padding:24px;">
+                            <img src="~/assets/loading.gif" height="40" />
+                            <span style="padding-left:8px;font-weight:bold;color:dimgray">Loading details...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="vue_metrics" ref="metrics_ref" v-show="true" style="overflow:auto;display:none;">
+                <Grid :data-items="result"
+                      :columns="columns"
+                      :scrollable="scrollable"
+                      :sortable="sortable"
+                      :sort="sort"
+                      @@sortchange="sortChangeHandler"
+                      height="100em">
+                    <template v-slot:metricDetailsColumn="{props, clickHandler}">
+                        <td :class="props.className"><a v-bind:href="getMetricUrl(props.dataItem)" class="grid-link">{{ props.dataItem.title }}</a></td>
+                    </template>
+                    <template v-slot:supportLinkColumn="{props, clickHandler}">
+                        <td :class="props.className"><a v-bind:href="props.dataItem.serviceDeskUrl" class="grid-link">{{ props.dataItem.serviceDeskUrl }}</a></td>
+                    </template>
+                </Grid>
+            </div>
+        </div>
+        <div class="card-footer">
+            @if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.AuthorMetric_Key)).Succeeded)
+            {
+                <a href="/submit-metric" class="btn btn-primary">Author a Metric</a>
+            }
+        </div>
+    </div>        
+</section>
+<script src="~/Scripts/metrics-list.js" asp-append-version="true"></script>

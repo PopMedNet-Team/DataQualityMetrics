@@ -1,0 +1,68 @@
+﻿@{
+    ViewData["Title"] = "";
+    string serviceDeskUrl = "<a target=\"_blank\" href=\"https://popmednet.atlassian.net/servicedesk/customer/portal/6\" style=\"white-space:nowrap;\">DQM Service Desk <i class=\"fas fa-external-link-alt\"></i></a>";
+}
+
+<div class="jumbotron mt-3">
+    <h1 class="display-4">Welcome to Data Quality Metrics</h1>
+    <p class="lead">The Data Quality Metrics (DQM) tool provides a harmonized approach to data characterization across multiple data sources to enable researchers to better assess data source comparability and fitness-for-use. The system operationalizes existing data quality (DQ) parameters and methodologies in a way that is compatible across Common Data Models (CDMs) and data sources. This data model and data source agnostic approach enables the DQM application to facilitate research planning and compare data characteristics across any data source.</p>
+    <hr class="my-4" />
+    <a class="btn btn-primary btn-lg" href="/resources">Learn more</a>
+</div>
+<div class="row">
+    <div class="col-lg-6 my-3">
+        <div class="card index-panel">
+            <div class="card-header">
+                <h5>Metrics</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Metrics are the descriptions of quantitative measurements that can be executed on data sources to characterize a specific aspect of the source data in a data model agnostic way. The DQM tool captures metadata about each Metric in a standardized way, regardless of the context or use cases. Metric authors describe the metric in enough detail for a data holder to interpret and generate the results of the Metric from their source data. These results, or measures, enable apples-to-apples comparisons across data sources irrespective of the CDM or data structure.</p>
+                <hr class="my-4" />
+                <a class="btn btn-primary" href="/metrics">Learn more</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 my-3">
+        <div class="card index-panel">
+            <div class="card-header">
+                <h5>Measures</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">A measure is the numeric representation of a metric that has been executed against a data source. Measures include the data characteristics defined in the metric, as well as metadata about the data source, metric details, and information about when the measurement was calculated. The measures can be explored in the visualization tools.</p>
+                <hr class="my-4" />
+                @if ((await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded)
+                {
+                    <a class="btn btn-primary" href="/submit-measure">Submit Measures</a>
+                }
+
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6 my-3">
+        <div class="card index-panel">
+            <div class="card-header">
+                <h5>Explore DQM</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">The DQM visualization tools overlay the metadata, metrics, and measures. Users can explore and evaluate data sources for specific characteristics, trends, and quality. DQM does not determine whether a data source passes or fails a metric test, but rather provides a view of data characteristics that enable a user to determine if the data are fit for their purpose.</p>
+                <hr class="my-4" />
+                <a class="btn btn-primary" href="/visualizations">Explore DQM</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-6 my-3">
+        <div class="card index-panel">
+            <div class="card-header">
+                <h5>Registration</h5>
+            </div>
+            <div class="card-body">
+                <p class="card-text">Users can register for an account that grants them various types of permissions within the DQM system. To do so, please click on ‘Register’ in the upper right-hand corner to register for an account. You will be asked to provide your name and contact information and select the permissions you are interested in: submit Metrics and/or submit Measures. You can then create credentials and finalize by clicking 'Register'. If you would like to change your permissions after registering for an account, please enter a request into our @Html.Raw(serviceDeskUrl).</p>
+                @if (User.Identity.IsAuthenticated == false)
+                {
+                <hr class="my-4" />
+                <a class="btn btn-primary" href="/registration">Register</a>
+                }
+            </div>
+        </div>
+    </div>
+</div>

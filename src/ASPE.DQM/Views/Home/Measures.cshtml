@@ -1,0 +1,49 @@
+﻿@{
+    ViewData["Title"] = "Measures";
+    bool canSubmitMeasures = User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.SubmitMeasure_Key)).Succeeded;
+    string serviceDeskUrl = "<a target=\"_blank\" href=\"https://popmednet.atlassian.net/servicedesk/customer/portal/6\" style=\"white-space:nowrap;\">DQM Service Desk <i class=\"fas fa-external-link-alt\"></i></a>";
+}
+
+<section id="vue_measures" ref="measures_ref">
+    <div class="card" style="margin-top:1.5rem;min-width:950px;">
+        <div class="card-header">
+            <h2>Measures</h2>
+        </div>
+        <div class="card-body">
+            <div class="alert alert-primary" role="alert">
+                <p class="p-0 m-0">A measure is the numeric representation of a metric that has been executed against a data source. Measures include the data characteristics defined in the metric, as well as metadata about the data source, metric details, and information about when the measurement was calculated. The measures can be explored in the visualization tools.</p>
+            </div>
+
+            <div class="card">
+                <div class="card-body">
+                    <h3 class="card-title">How to submit Measures:</h3>
+                    <div class="card-text">
+                        <p>In order to submit measures, you must have a user account that has been granted access.  Please click on ‘Register’ in the upper right-hand corner to register for an account.  If you already have an account, but do not have the ability to submit measures, please enter a request into our @Html.Raw(serviceDeskUrl).</p>
+                        <p>First, login to your user account that has been granted the ability to submit measures. Navigate to the <a href="/metrics">Metrics page</a> to select a metric of interest. Once selected, scroll down the metric description to locate the attached Excel Measure template and download it. Populate the provided template with your data according to the following: </p>
+                        <ul>
+                            <li>When you have downloaded the template, fill out Tab 1 according to the included metadata descriptions.</li>
+                            <li>Fill out Tab 2 based on the following column definitions:
+                                <ul>
+                                    <li>Raw value - predefined value-set. For example, a SEX value set may contain the following: “M”, “F”, “A”, “OT”.</li>
+                                    <li>Definition - descriptive text for the raw values. Following the above example, the definition for each raw value would be: “Male”, “Female”, “Ambiguous”, and “Other” respectively.</li>
+                                    <li>Measure - based on the result type (count vs. percentage); result or answer to the metric of interest.</li>
+                                    <li>Total - overall count/percentage of Measures.</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <p>It is necessary to download the template from the specific metric which is being executed, it contains required information to identify the metric the measure will be associated to.</p>
+                        <p>Once the template has been populated, navigate to the Submit Measures page. Select the file of interest and submit the completed template.</p>
+                        <p>For more information, see the <a href="/resources">Resources page</a>.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            @if (User.Identity.IsAuthenticated && (await AuthorizationService.AuthorizeAsync(User, ASPE.DQM.Identity.Claims.AuthorMetric_Key)).Succeeded)
+            {
+                <a href="/submit-metric" class="btn btn-primary">Submit a Measure</a>
+            }
+            <a href="/visualizations" class="btn btn-primary">Explore DQM</a>
+        </div>
+    </div>
+</section>

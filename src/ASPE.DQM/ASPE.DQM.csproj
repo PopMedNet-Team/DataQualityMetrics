@@ -1,0 +1,93 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <UserSecretsId>e7497d62-4a54-4898-8899-a7c6fbae0e37</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Remove="wwwroot\css\site-original.css" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="Scripts\Controls\FileList.ts" />
+    <None Remove="Scripts\Controls\FileUpload.ts" />
+    <None Remove="Scripts\dashboard.ts" />
+    <None Remove="Scripts\data-common.ts" />
+    <None Remove="Scripts\measures-manage.ts" />
+    <None Remove="Scripts\measures-submit.ts" />
+    <None Remove="Scripts\metric-details.ts" />
+    <None Remove="Scripts\metric-edit.ts" />
+    <None Remove="Scripts\metric-submit.ts" />
+    <None Remove="Scripts\metrics-list.ts" />
+    <None Remove="Scripts\page.ts" />
+    <None Remove="Scripts\RegisterVisualization.ts" />
+    <None Remove="Scripts\Registration.ts" />
+    <None Remove="Scripts\Test.ts" />
+    <None Remove="Scripts\visual.ts" />
+    <None Remove="Scripts\visualizations-list.ts" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="BuildBundlerMinifier" Version="3.2.435" />
+    <PackageReference Include="DocumentFormat.OpenXml" Version="2.9.1" />
+    <PackageReference Include="HtmlAgilityPack" Version="1.11.17" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.Extensions" Version="3.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Razor.RuntimeCompilation" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Azure.Storage.Blob" Version="11.1.1" />
+    <PackageReference Include="Microsoft.Azure.Storage.File" Version="11.1.1" />    
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.1.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="3.1.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.0" />
+    <PackageReference Include="Serilog" Version="2.9.0" />
+    <PackageReference Include="Serilog.Extensions.Logging" Version="3.0.1" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.1.0" />
+    <PackageReference Include="Serilog.Sinks.AzureBlobStorage" Version="1.4.0" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.File" Version="4.1.0" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <ProjectReference Include="..\ASPE.DQM.Data\ASPE.DQM.Data.csproj" />
+    <ProjectReference Include="..\ASPE.DQM.Files\ASPE.DQM.Files.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <TypeScriptCompile Include="Scripts\Controls\FileList.ts" />
+    <TypeScriptCompile Include="Scripts\Controls\FileUpload.ts" />
+    <TypeScriptCompile Include="Scripts\dashboard.ts" />
+    <TypeScriptCompile Include="Scripts\data-common.ts" />
+    <TypeScriptCompile Include="Scripts\measures-manage.ts" />
+    <TypeScriptCompile Include="Scripts\measures-submit.ts" />
+    <TypeScriptCompile Include="Scripts\metric-details.ts" />
+    <TypeScriptCompile Include="Scripts\metric-edit.ts" />
+    <TypeScriptCompile Include="Scripts\metric-submit.ts" />
+    <TypeScriptCompile Include="Scripts\metrics-list.ts" />
+    <TypeScriptCompile Include="Scripts\page.ts" />
+    <TypeScriptCompile Include="Scripts\RegisterVisualization.ts" />
+    <TypeScriptCompile Include="Scripts\Registration.ts" />
+    <TypeScriptCompile Include="Scripts\Test.ts" />
+    <TypeScriptCompile Include="Scripts\visual.ts" />
+    <TypeScriptCompile Include="Scripts\visualizations-list.ts" />
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="Properties\PublishProfiles\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <DotNetCliToolReference Include="Microsoft.EntityFrameworkCore.Tools.DotNet" Version="2.0.3" />
+  </ItemGroup>
+</Project>
