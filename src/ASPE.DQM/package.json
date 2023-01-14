@@ -64,7 +64,7 @@
     "vue-class-component": "^7.1.0",
     "vue-property-decorator": "^8.2.1",
     "webpack": "4.29.0",
-    "webpack-cli": "3.2.1",
+    "webpack-cli": "3.3.12",
     "webpack-merge": "4.2.2"
   },
   "dependencies": {
